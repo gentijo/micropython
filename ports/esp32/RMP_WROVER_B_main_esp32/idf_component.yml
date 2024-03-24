@@ -4,11 +4,9 @@ dependencies:
   espressif/esp_lcd_touch_gt911: "^1.0.7~1"
   lvgl/lvgl: "^8.3.8"  
 
-#  libROSMicroPy:
-#    path: ../../../../libROSMicroPy
+  micro_ros_espidf_component:
+    path: ../../../../components/micro_ros_espidf_component
 
-#  micro_ros_espidf_component:
-#    path: ../../../../micro_ros_espidf_component
 
   idf:
     version: ">=5.0.4"
