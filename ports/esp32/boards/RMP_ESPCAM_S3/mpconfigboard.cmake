@@ -3,11 +3,9 @@ set(IDF_TARGET esp32s3)
 set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.menuconfig
     boards/sdkconfig.base
-#    boards/sdkconfig.usb
     boards/sdkconfig.ble
     boards/sdkconfig.spiram_sx
     boards/ESP32_GENERIC_S3/sdkconfig.board
-#    boards/sdkconfig.lvgl
 )
 
 set(MICROPY_BOARD_VARIANT "SPIRAM_OCT")
@@ -20,6 +18,6 @@ if(MICROPY_BOARD_VARIANT STREQUAL "SPIRAM_OCT")
     )
 
     list(APPEND MICROPY_DEF_BOARD
-        MICROPY_HW_BOARD_NAME="ESP32S3 RosMicroPy LCD with Oct RAM"
+        MICROPY_HW_BOARD_NAME="ESP32S3 RosMicroPy ESP Cam with Oct RAM"
     )
 endif()
