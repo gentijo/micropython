@@ -1,7 +1,11 @@
 set(SDKCONFIG_DEFAULTS
+    boards/sdkconfig.microros
     boards/sdkconfig.base
     boards/sdkconfig.ble
     boards/RMP_WROVER_B/sdkconfig.board
+    boards/sdkconfig.240mhz
+#    boards/sdkconfig.int32
+#    boards/sdkconfig.compiler.debug
 )
 
 if(MICROPY_BOARD_VARIANT STREQUAL "D2WD")
