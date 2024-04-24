@@ -1,6 +1,14 @@
-set(SDKCONFIG_DEFAULTS
+
+set(IDF_TARGET esp32)
+
+set(SDKCONFIG_DEFAULTS 
+    boards/sdkconfig.microros
+    boards/RMP_ESPCAM/sdkconfig.cam
     boards/sdkconfig.base
     boards/sdkconfig.ble
+    boards/sdkconfig.240mhz
+    boards/sdkconfig.spiram
+
 )
 
 if(MICROPY_BOARD_VARIANT STREQUAL "D2WD")
