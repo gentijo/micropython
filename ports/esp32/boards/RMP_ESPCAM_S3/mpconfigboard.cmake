@@ -1,9 +1,10 @@
-set(IDF_TARGET esp32)
+set(IDF_TARGET esp32s3)
 
 set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.menuconfig
     boards/sdkconfig.base
     boards/sdkconfig.ble
+    boards/sdkconfig.usb
     boards/sdkconfig.spiram_sx
     boards/ESP32_GENERIC_S3/sdkconfig.board
 )

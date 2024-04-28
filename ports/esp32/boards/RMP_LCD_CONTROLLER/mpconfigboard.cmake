@@ -3,11 +3,11 @@ set(IDF_TARGET esp32s3)
 set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.menuconfig
     boards/sdkconfig.base
-#    boards/sdkconfig.usb
+    boards/sdkconfig.usb
     boards/sdkconfig.ble
     boards/sdkconfig.spiram_sx
     boards/ESP32_GENERIC_S3/sdkconfig.board
-#    boards/sdkconfig.lvgl
+    boards/sdkconfig.lvgl
 )
 
 set(MICROPY_BOARD_VARIANT "SPIRAM_OCT")
