@@ -6,7 +6,7 @@ set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.usb
     boards/sdkconfig.ble
     boards/sdkconfig.spiram_sx
-    boards/ESP32_GENERIC_S3/sdkconfig.board
+    boards/RMP_LCD_CONTROLLER/sdkconfig.board
     boards/sdkconfig.lvgl
 )
 
