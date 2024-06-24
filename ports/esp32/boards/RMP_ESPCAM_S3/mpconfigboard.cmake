@@ -6,7 +6,8 @@ set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.ble
     boards/sdkconfig.usb
     boards/sdkconfig.spiram_sx
-    boards/ESP32_GENERIC_S3/sdkconfig.board
+    boards/RMP_ESPCAM_S3/sdkconfig.board
+    boards/sdkconfig.microros
 )
 
 set(MICROPY_BOARD_VARIANT "SPIRAM_OCT")

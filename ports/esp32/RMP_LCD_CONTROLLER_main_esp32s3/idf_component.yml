@@ -24,5 +24,7 @@ dependencies:
   micro_ros_espidf_component:
     path: ../../../../components/micro_ros_espidf_component
 
+  joltwallet/littlefs: ">=1.14.5"
+
   idf:
     version: ">=5.0.4"

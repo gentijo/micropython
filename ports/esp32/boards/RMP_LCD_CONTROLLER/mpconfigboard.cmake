@@ -8,6 +8,7 @@ set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.spiram_sx
     boards/RMP_LCD_CONTROLLER/sdkconfig.board
     boards/sdkconfig.lvgl
+    boards/sdkconfig.microros
 )
 
 set(MICROPY_BOARD_VARIANT "SPIRAM_OCT")
