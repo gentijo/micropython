@@ -18,8 +18,8 @@ dependencies:
   i2c_bus:
     path: ../../../../components/i2c_bus
 
-  ESP32S3_8048S050C:
-    path: ../../../../components/lvgl_drivers/ESP32S3_8048S050C
+  #ESP32S3_8048S050C:
+  #  path: ../../../../components/lvgl_drivers/ESP32S3_8048S050C
   
   micro_ros_espidf_component:
     path: ../../../../components/micro_ros_espidf_component
