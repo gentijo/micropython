@@ -13,4 +13,6 @@ list(APPEND IDF_COMPONENTS
   json
 )
 
+set(LVGL_DRIVER_ESP32S3_8048S050C 1)
+
 include(${MICROPY_PORT_DIR}/esp32_common.cmake)
