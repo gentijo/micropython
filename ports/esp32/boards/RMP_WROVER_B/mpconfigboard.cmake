@@ -1,5 +1,5 @@
 set(IDF_TARGET esp32)
-
+#set(IDF_TARGET esp32s3)
 
 set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.microros
@@ -9,6 +9,7 @@ set(SDKCONFIG_DEFAULTS
     boards/sdkconfig.240mhz
 #    boards/sdkconfig.int32
 #    boards/sdkconfig.compiler.debug
+#    boards/sdkconfig.usb
 )
 
 if(MICROPY_BOARD_VARIANT STREQUAL "D2WD")
