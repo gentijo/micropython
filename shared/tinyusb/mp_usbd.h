@@ -77,6 +77,9 @@ static inline void mp_usbd_init_tud(void) {
 // Run the TinyUSB device task
 void mp_usbd_task(void);
 
+// Optional post-task hook. May be overridden by other components.
+void mp_usbd_post_task_hook(void);
+
 // Schedule a call to mp_usbd_task(), even if no USB interrupt has occurred
 void mp_usbd_schedule_task(void);
 
@@ -92,7 +95,9 @@ void mp_usbd_hex_str(char *out_str, const uint8_t *bytes, size_t bytes_len);
 // Length of built-in configuration descriptor
 #define MP_USBD_BUILTIN_DESC_CFG_LEN (TUD_CONFIG_DESC_LEN +                     \
     (CFG_TUD_CDC ? (TUD_CDC_DESC_LEN) : 0) +  \
-    (CFG_TUD_MSC ? (TUD_MSC_DESC_LEN) : 0)    \
+    (CFG_TUD_MSC ? (TUD_MSC_DESC_LEN) : 0) +  \
+    (CFG_TUD_ECM_RNDIS ? (TUD_CDC_ECM_DESC_LEN) : 0) + \
+    (CFG_TUD_NCM ? (TUD_CDC_NCM_DESC_LEN) : 0)    \
     )
 
 // Built-in USB device and configuration descriptor values

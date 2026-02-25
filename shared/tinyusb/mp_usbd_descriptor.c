@@ -35,6 +35,8 @@
 #define USBD_CDC_CMD_MAX_SIZE (8)
 #define USBD_CDC_IN_OUT_MAX_SIZE ((CFG_TUD_MAX_SPEED == OPT_MODE_HIGH_SPEED) ? 512 : 64)
 #define USBD_MSC_IN_OUT_MAX_SIZE ((CFG_TUD_MAX_SPEED == OPT_MODE_HIGH_SPEED) ? 512 : 64)
+#define USBD_NET_NOTIF_MAX_SIZE (8)
+#define USBD_NET_IN_OUT_MAX_SIZE ((CFG_TUD_MAX_SPEED == OPT_MODE_HIGH_SPEED) ? 512 : 64)
 
 const tusb_desc_device_t mp_usbd_builtin_desc_dev = {
     .bLength = sizeof(tusb_desc_device_t),
@@ -63,6 +65,16 @@ const uint8_t mp_usbd_builtin_desc_cfg[MP_USBD_BUILTIN_DESC_CFG_LEN] = {
     #endif
     #if CFG_TUD_MSC
     TUD_MSC_DESCRIPTOR(USBD_ITF_MSC, USBD_STR_MSC, EPNUM_MSC_OUT, EPNUM_MSC_IN, USBD_MSC_IN_OUT_MAX_SIZE),
+    #endif
+    #if CFG_TUD_ECM_RNDIS
+    TUD_CDC_ECM_DESCRIPTOR(USBD_ITF_NET, USBD_STR_NET, USBD_STR_NET_MAC,
+        EPNUM_NET_NOTIF, USBD_NET_NOTIF_MAX_SIZE, EPNUM_NET_OUT, EPNUM_NET_IN,
+        USBD_NET_IN_OUT_MAX_SIZE, CFG_TUD_NET_MTU),
+    #endif
+    #if CFG_TUD_NCM
+    TUD_CDC_NCM_DESCRIPTOR(USBD_ITF_NET, USBD_STR_NET, USBD_STR_NET_MAC,
+        EPNUM_NET_NOTIF, USBD_NET_NOTIF_MAX_SIZE, EPNUM_NET_OUT, EPNUM_NET_IN,
+        USBD_NET_IN_OUT_MAX_SIZE, CFG_TUD_NET_MTU),
     #endif
 };
 
@@ -113,6 +125,14 @@ const uint16_t *tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
             #if CFG_TUD_MSC
             case USBD_STR_MSC:
                 desc_str = MICROPY_HW_USB_MSC_INTERFACE_STRING;
+                break;
+            #endif
+            #if CFG_TUD_ECM_RNDIS || CFG_TUD_NCM
+            case USBD_STR_NET:
+                desc_str = MICROPY_HW_USB_NET_INTERFACE_STRING;
+                break;
+            case USBD_STR_NET_MAC:
+                desc_str = MICROPY_HW_USB_NET_MAC_STRING;
                 break;
             #endif
             default:

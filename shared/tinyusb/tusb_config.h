@@ -75,6 +75,23 @@
 #define CFG_TUD_MSC             (0)
 #endif
 
+#ifndef MICROPY_HW_USB_NET
+#define MICROPY_HW_USB_NET      (0)
+#endif
+
+// TinyUSB NET class enablement (ECM/RNDIS or NCM).
+#ifndef CFG_TUD_ECM_RNDIS
+#if MICROPY_HW_USB_NET
+#define CFG_TUD_ECM_RNDIS       (1)
+#else
+#define CFG_TUD_ECM_RNDIS       (0)
+#endif
+#endif
+
+#ifndef CFG_TUD_NCM
+#define CFG_TUD_NCM             (0)
+#endif
+
 // CDC Configuration
 #if CFG_TUD_CDC
 #ifndef CFG_TUD_CDC_RX_BUFSIZE
@@ -94,6 +111,15 @@
 #define CFG_TUD_MSC_BUFSIZE (MICROPY_FATFS_MAX_SS)
 #endif // CFG_TUD_MSC
 
+#if CFG_TUD_ECM_RNDIS || CFG_TUD_NCM
+#ifndef MICROPY_HW_USB_NET_INTERFACE_STRING
+#define MICROPY_HW_USB_NET_INTERFACE_STRING "Board NET"
+#endif
+#ifndef MICROPY_HW_USB_NET_MAC_STRING
+#define MICROPY_HW_USB_NET_MAC_STRING "020000000001"
+#endif
+#endif // CFG_TUD_ECM_RNDIS || CFG_TUD_NCM
+
 // Define built-in interface, string and endpoint numbering based on the above config
 
 #define USBD_STR_0 (0x00)
@@ -102,6 +128,8 @@
 #define USBD_STR_SERIAL (0x03)
 #define USBD_STR_CDC (0x04)
 #define USBD_STR_MSC (0x05)
+#define USBD_STR_NET (0x06)
+#define USBD_STR_NET_MAC (0x07)
 
 #define USBD_MAX_POWER_MA (250)
 
@@ -114,30 +142,53 @@
 #define USBD_CDC_EP_CMD (0x81)
 #define USBD_CDC_EP_OUT (0x02)
 #define USBD_CDC_EP_IN (0x82)
+#define USBD_ITF_AFTER_CDC (USBD_ITF_CDC + 2)
+#define USBD_EP_NUM_AFTER_CDC (3)
+#define USBD_STR_AFTER_CDC (USBD_STR_CDC + 1)
+#else
+#define USBD_ITF_AFTER_CDC (0)
+#define USBD_EP_NUM_AFTER_CDC (1)
+#define USBD_STR_AFTER_CDC (USBD_STR_SERIAL + 1)
 #endif // CFG_TUD_CDC
 
 #if CFG_TUD_MSC
 // Interface & Endpoint numbers for MSC come after CDC, if it is enabled
-#if CFG_TUD_CDC
-#define USBD_ITF_MSC (2)
-#define EPNUM_MSC_OUT (0x03)
-#define EPNUM_MSC_IN (0x83)
+#define USBD_ITF_MSC (USBD_ITF_AFTER_CDC)
+#define EPNUM_MSC_OUT (USBD_EP_NUM_AFTER_CDC)
+#define EPNUM_MSC_IN (0x80 | USBD_EP_NUM_AFTER_CDC)
+#define USBD_ITF_AFTER_MSC (USBD_ITF_MSC + 1)
+#define USBD_EP_NUM_AFTER_MSC (USBD_EP_NUM_AFTER_CDC + 1)
+#define USBD_STR_AFTER_MSC (USBD_STR_MSC + 1)
 #else
-#define USBD_ITF_MSC (0)
-#define EPNUM_MSC_OUT (0x01)
-#define EPNUM_MSC_IN (0x81)
-#endif // CFG_TUD_CDC
+#define USBD_ITF_AFTER_MSC (USBD_ITF_AFTER_CDC)
+#define USBD_EP_NUM_AFTER_MSC (USBD_EP_NUM_AFTER_CDC)
+#define USBD_STR_AFTER_MSC (USBD_STR_AFTER_CDC)
 #endif // CFG_TUD_MSC
 
+#if CFG_TUD_ECM_RNDIS || CFG_TUD_NCM
+// NET uses two interfaces: control + data.
+#define USBD_ITF_NET (USBD_ITF_AFTER_MSC)
+#define EPNUM_NET_OUT (USBD_EP_NUM_AFTER_MSC)
+#define EPNUM_NET_IN (0x80 | USBD_EP_NUM_AFTER_MSC)
+#define EPNUM_NET_NOTIF (0x80 | (USBD_EP_NUM_AFTER_MSC + 1))
+#define USBD_ITF_AFTER_NET (USBD_ITF_NET + 2)
+#define USBD_EP_NUM_AFTER_NET (USBD_EP_NUM_AFTER_MSC + 2)
+#define USBD_STR_AFTER_NET (USBD_STR_NET_MAC + 1)
+#endif // CFG_TUD_ECM_RNDIS || CFG_TUD_NCM
+
 /* Limits of builtin USB interfaces, endpoints, strings */
-#if CFG_TUD_MSC
-#define USBD_ITF_BUILTIN_MAX (USBD_ITF_MSC + 1)
-#define USBD_STR_BUILTIN_MAX (USBD_STR_MSC + 1)
-#define USBD_EP_BUILTIN_MAX (EPNUM_MSC_OUT + 1)
+#if CFG_TUD_ECM_RNDIS || CFG_TUD_NCM
+#define USBD_ITF_BUILTIN_MAX (USBD_ITF_AFTER_NET)
+#define USBD_STR_BUILTIN_MAX (USBD_STR_AFTER_NET)
+#define USBD_EP_BUILTIN_MAX (USBD_EP_NUM_AFTER_NET)
+#elif CFG_TUD_MSC
+#define USBD_ITF_BUILTIN_MAX (USBD_ITF_AFTER_MSC)
+#define USBD_STR_BUILTIN_MAX (USBD_STR_AFTER_MSC)
+#define USBD_EP_BUILTIN_MAX (USBD_EP_NUM_AFTER_MSC)
 #elif CFG_TUD_CDC
-#define USBD_ITF_BUILTIN_MAX (USBD_ITF_CDC + 2)
-#define USBD_STR_BUILTIN_MAX (USBD_STR_CDC + 1)
-#define USBD_EP_BUILTIN_MAX (((USBD_CDC_EP_IN)&~TUSB_DIR_IN_MASK) + 1)
+#define USBD_ITF_BUILTIN_MAX (USBD_ITF_AFTER_CDC)
+#define USBD_STR_BUILTIN_MAX (USBD_STR_AFTER_CDC)
+#define USBD_EP_BUILTIN_MAX (USBD_EP_NUM_AFTER_CDC)
 #else // !CFG_TUD_MSC && !CFG_TUD_CDC
 #define USBD_ITF_BUILTIN_MAX (0)
 #define USBD_STR_BUILTIN_MAX (0)

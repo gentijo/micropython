@@ -30,10 +30,16 @@
 
 #include "mp_usbd.h"
 
+// Optional hook for ports/modules that need to run logic immediately after
+// each TinyUSB task execution.
+__attribute__((weak)) void mp_usbd_post_task_hook(void) {
+}
+
 #if !MICROPY_HW_ENABLE_USB_RUNTIME_DEVICE
 
 void mp_usbd_task(void) {
     tud_task_ext(0, false);
+    mp_usbd_post_task_hook();
 }
 
 void mp_usbd_task_callback(mp_sched_node_t *node) {

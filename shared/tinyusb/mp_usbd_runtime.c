@@ -532,6 +532,7 @@ static void mp_usbd_task_inner(void) {
     in_usbd_task = true;
 
     tud_task_ext(0, false);
+    mp_usbd_post_task_hook();
 
     mp_obj_usb_device_t *usbd = MP_OBJ_TO_PTR(MP_STATE_VM(usbd));
 
